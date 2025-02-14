@@ -94,8 +94,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<java.source.version>1.7</java.source.version>
-		<java.target.version>1.7</java.target.version>
+		<java.source.version>1.8</java.source.version>
+		<java.target.version>1.8</java.target.version>
 
 		<!-- dependency versions -->
 		<jackson.version>2.9.6</jackson.version>
@@ -166,6 +166,11 @@
 		</testResources>
 		<plugins>
 			<plugin>
+				<groupId>com.atlassian.maven.plugins</groupId>
+				<artifactId>clover-maven-plugin</artifactId>
+				<version>4.1.1</version>
+			</plugin>
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compiler.plugin.version}</version>
 				<configuration>
@@ -183,6 +188,7 @@
 							<goal>bnd-process</goal>
 						</goals>
 						<configuration>
+							<!--suppress UnresolvedMavenProperty -->
 							<bnd>
 						<![CDATA[
 					  Automatic-Module-Name: com.esri.geometry.api
@@ -229,8 +235,8 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${javadoc.plugin.version}</version>
 				<configuration>
-					<link>http://help.arcgis.com/EN/sdk/10.0/Java_AO_ADF/api/arcobjects</link>
-					<link>http://docs.oracle.com/javase/6/docs/api/</link>
+<!--					<link>http://help.arcgis.com/EN/sdk/10.0/Java_AO_ADF/api/arcobjects</link>-->
+<!--					<link>http://docs.oracle.com/javase/6/docs/api/</link>-->
 				</configuration>
 				<executions>
 					<execution>
