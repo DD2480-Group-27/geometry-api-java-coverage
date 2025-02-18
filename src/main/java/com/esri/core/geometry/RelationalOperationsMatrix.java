@@ -22,7 +22,7 @@
  email: contracts@esri.com
  */
 package com.esri.core.geometry;
-
+import java.util.Optional;
 class RelationalOperationsMatrix {
 	private TopoGraph m_topo_graph;
 	private int[] m_matrix;
@@ -1251,25 +1251,15 @@ class RelationalOperationsMatrix {
 		if (dim_a == dim_b) {
 			if (dim_a != 1) {
 				// Valid for area-area, Point-Point
-				if (scl.charAt(0) == 'T' && scl.charAt(1) == '*'
-						&& scl.charAt(2) == 'T' && scl.charAt(3) == '*'
-						&& scl.charAt(4) == '*' && scl.charAt(5) == '*'
-						&& scl.charAt(6) == 'T' && scl.charAt(7) == '*'
-						&& scl.charAt(8) == '*')
-					return true;
-
-				return false;
-			}
-
+                return Optional.ofNullable(scl)
+						.map(s1 -> s1.startsWith("T*T***T**"))
+						.orElse(false);
+            }
 			// Valid for Line-Line
-			if (scl.charAt(0) == '1' && scl.charAt(1) == '*'
-					&& scl.charAt(2) == 'T' && scl.charAt(3) == '*'
-					&& scl.charAt(4) == '*' && scl.charAt(5) == '*'
-					&& scl.charAt(6) == 'T' && scl.charAt(7) == '*'
-					&& scl.charAt(8) == '*')
-				return true;
+			return Optional.ofNullable(scl)
+					.map(s1 -> s1.startsWith("1*T***T**"))
+					.orElse(false);
 		}
-
 		return false;
 	}
 
