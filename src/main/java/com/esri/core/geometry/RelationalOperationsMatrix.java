@@ -22,7 +22,7 @@
  email: contracts@esri.com
  */
 package com.esri.core.geometry;
-import java.util.Optional;
+
 class RelationalOperationsMatrix {
 	private TopoGraph m_topo_graph;
 	private int[] m_matrix;
@@ -1251,14 +1251,10 @@ class RelationalOperationsMatrix {
 		if (dim_a == dim_b) {
 			if (dim_a != 1) {
 				// Valid for area-area, Point-Point
-                return Optional.ofNullable(scl)
-						.map(s1 -> s1.startsWith("T*T***T**"))
-						.orElse(false);
+                return scl.startsWith("T*T***T**");
             }
 			// Valid for Line-Line
-			return Optional.ofNullable(scl)
-					.map(s1 -> s1.startsWith("1*T***T**"))
-					.orElse(false);
+			return scl.startsWith("1*T***T**");
 		}
 		return false;
 	}
