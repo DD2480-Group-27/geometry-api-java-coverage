@@ -1255,16 +1255,16 @@ class RelationalOperationsMatrix {
 	// Checks whether the scl string is the overlaps relation.
 	private static boolean overlaps_(String scl, int dim_a, int dim_b) {
 		printOutTakenBranch(0);
-		if (dim_a == dim_b) {
+		if (dim_a == dim_b) {		// Have same dimension
 			printOutTakenBranch(1);
-			if (dim_a != 1) {
+			if (dim_a != 1) {			// Geometry other than Line.java
 				printOutTakenBranch(2);
 				// Valid for area-area, Point-Point
 				if (scl.charAt(0) == 'T' && scl.charAt(1) == '*'
 						&& scl.charAt(2) == 'T' && scl.charAt(3) == '*'
 						&& scl.charAt(4) == '*' && scl.charAt(5) == '*'
 						&& scl.charAt(6) == 'T' && scl.charAt(7) == '*'
-						&& scl.charAt(8) == '*') {
+						&& scl.charAt(8) == '*') {			// Match the described String "T*T***T**"
 					printOutTakenBranch(3);
 					return true;
 				}
@@ -1277,7 +1277,7 @@ class RelationalOperationsMatrix {
 					&& scl.charAt(2) == 'T' && scl.charAt(3) == '*'
 					&& scl.charAt(4) == '*' && scl.charAt(5) == '*'
 					&& scl.charAt(6) == 'T' && scl.charAt(7) == '*'
-					&& scl.charAt(8) == '*') {
+					&& scl.charAt(8) == '*') {			// Match the described String "1*T***T**"
 				printOutTakenBranch(6);
 				return true;
 			}
