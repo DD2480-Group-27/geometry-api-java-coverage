@@ -24,11 +24,11 @@
 package com.esri.core.geometry;
 import java.util.Locale;
 
-class StringUtils {
+public class StringUtils {
 
-    static int[] timesRan = new int[8];
+    private static int[] timesRan = new int[8];
 
-    static void appendDouble(double value, int precision,
+    public static void appendDouble(double value, int precision,
             StringBuilder stringBuilder) {
         if (precision < 0) {
             timesRan[0]++;
@@ -80,12 +80,11 @@ class StringUtils {
                 stringBuilder.append(str_dbl);
 
             } 
+        } else {
+            stringBuilder.append(str_dbl);
+
         }
 
-
-        //for (int i = 0; i < coverage.length; i++) {
-        //    System.out.println("Decision point " + i + " was " + (coverage[i] ? "taken" : "not taken"));
-        //}
 
         System.out.println("\n");
         for (int i = 0; i < timesRan.length; i++) {
