@@ -88,6 +88,9 @@ public final class Line extends Segment implements Serializable {
 	/**
 	 * Creates a line segment.
 	 */
+
+	static boolean[] covered = new boolean[52];
+
 	public Line() {
 		m_description = VertexDescriptionDesignerImpl.getDefaultDescriptor2D();
 	}
@@ -737,46 +740,46 @@ public final class Line extends Segment implements Serializable {
 	int _intersectLineLineExact(Line line1, Line line2,
 			Point2D[] intersectionPoints, double[] param1, double[] param2) {
 		int counter = 0;
-		if (line1.m_xStart == line2.m_xStart
+		if (line1.m_xStart == line2.m_xStart									//Branch 1
 				&& line1.m_yStart == line2.m_yStart) {
-			if (param1 != null)// if (param1)
+			if (param1 != null)// if (param1)									//2
 				param1[counter] = 0.0;
-			if (param2 != null)// if (param2)
+			if (param2 != null)// if (param2)									//3
 				param2[counter] = 0.0;
 
-			if (intersectionPoints != null)// if (intersectionPoints)
+			if (intersectionPoints != null)// if (intersectionPoints)			//4
 				intersectionPoints[counter] = Point2D.construct(line1.m_xStart,
 						line1.m_yStart);
 
 			counter++;
 		}
 
-		if (line1.m_xStart == line2.m_xEnd && line1.m_yStart == line2.m_yEnd) {
-			if (param1 != null)// if (param1)
+		if (line1.m_xStart == line2.m_xEnd && line1.m_yStart == line2.m_yEnd) {		//5
+			if (param1 != null)// if (param1)										//6
 				param1[counter] = 0.0;
-			if (param2 != null)// if (param2)
+			if (param2 != null)// if (param2)										//7
 				param2[counter] = 1.0;
 
-			if (intersectionPoints != null)// if (intersectionPoints)
+			if (intersectionPoints != null)// if (intersectionPoints)				//8
 				intersectionPoints[counter] = Point2D.construct(line1.m_xStart,
 						line1.m_yStart);
 
 			counter++;
 		}
 
-		if (line1.m_xEnd == line2.m_xStart && line1.m_yEnd == line2.m_yStart) {
-			if (counter == 2) {// both segments a degenerate
-				if (param1 != null)// if (param1)
+		if (line1.m_xEnd == line2.m_xStart && line1.m_yEnd == line2.m_yStart) {		//9
+			if (counter == 2) {// both segments a degenerate						//10
+				if (param1 != null)// if (param1)									//11
 				{
 					param1[0] = 0.0;
 					param1[1] = 1.0;
 				}
-				if (param2 != null)// if (param2)
+				if (param2 != null)// if (param2)									//12
 				{
 					param2[0] = 1.0;
 				}
 
-				if (intersectionPoints != null)// if (intersectionPoints)
+				if (intersectionPoints != null)// if (intersectionPoints)			//13
 				{
 					intersectionPoints[0] = Point2D.construct(line1.m_xEnd,
 							line1.m_yEnd);
@@ -787,31 +790,31 @@ public final class Line extends Segment implements Serializable {
 				return counter;
 			}
 
-			if (param1 != null)// if (param1)
+			if (param1 != null)// if (param1)										//14
 				param1[counter] = 1.0;
-			if (param2 != null)// if (param2)
+			if (param2 != null)// if (param2)										//15
 				param2[counter] = 0.0;
 
-			if (intersectionPoints != null)// if (intersectionPoints)
+			if (intersectionPoints != null)// if (intersectionPoints)				//16
 				intersectionPoints[counter] = Point2D.construct(line1.m_xEnd,
 						line1.m_yEnd);
 
 			counter++;
 		}
 
-		if (line1.m_xEnd == line2.m_xEnd && line1.m_yEnd == line2.m_yEnd) {
-			if (counter == 2) {// both segments are degenerate
-				if (param1 != null)// if (param1)
+		if (line1.m_xEnd == line2.m_xEnd && line1.m_yEnd == line2.m_yEnd) {			//17
+			if (counter == 2) {// both segments are degenerate						//18
+				if (param1 != null)// if (param1)									//19
 				{
 					param1[0] = 0.0;
 					param1[1] = 1.0;
 				}
-				if (param2 != null)// if (param2)
+				if (param2 != null)// if (param2)									//20
 				{
 					param2[0] = 1.0;
 				}
 
-				if (intersectionPoints != null)// if (intersectionPoints)
+				if (intersectionPoints != null)// if (intersectionPoints)			//21
 				{
 					intersectionPoints[0] = Point2D.construct(line1.m_xEnd,
 							line1.m_yEnd);
@@ -822,12 +825,12 @@ public final class Line extends Segment implements Serializable {
 				return counter;
 			}
 
-			if (param1 != null)// if (param1)
+			if (param1 != null)// if (param1)										//22
 				param1[counter] = 1.0;
-			if (param2 != null)// if (param2)
+			if (param2 != null)// if (param2)										//23
 				param2[counter] = 1.0;
 
-			if (intersectionPoints != null)// if (intersectionPoints)
+			if (intersectionPoints != null)// if (intersectionPoints)				//24
 				intersectionPoints[counter] = Point2D.construct(line1.m_xEnd,
 						line1.m_yEnd);
 			counter++;
@@ -836,43 +839,75 @@ public final class Line extends Segment implements Serializable {
 		return counter;
 	}
 
-	static int _intersectLineLine(Line line1, Line line2,
+	//inte 8, 13, 18, 22, 47
+	static int _intersectLineLine(Line line1, Line line2,														
 			Point2D[] intersectionPoints, double[] param1, double[] param2,
 			double tolerance) {
 		// _ASSERT(!param1 && !param2 || param1);
 		int counter = 0;
+		int i = 3;
 		// Test the end points for exact coincidence.
 		double t11 = line1._intersection(line2.getStartXY(), tolerance, false);
 		double t12 = line1._intersection(line2.getEndXY(), tolerance, false);
 		double t21 = line2._intersection(line1.getStartXY(), tolerance, false);
 		double t22 = line2._intersection(line1.getEndXY(), tolerance, false);
-
-		if (!NumberUtils.isNaN(t11)) {
-			if (param1 != null)// if (param1)
+				
+		if (!NumberUtils.isNaN(t11)) {															//branch 1			
+			covered[0] = true;
+			if (param1 != null){// if (param1)													//2
+				covered[1] = true;	
 				param1[counter] = t11;
-			if (param2 != null)// if (param2)
+			} else {
+				covered[27] = true;	//2 false -> 28
+			}
+			if (param2 != null){// if (param2)													//3
+				covered[2] = true;	
 				param2[counter] = 0;
-
-			if (intersectionPoints != null)// if (intersectionPoints)
+			} else {
+				covered[28] = true;	//3 false -> 29
+			}
+			if (intersectionPoints != null){// if (intersectionPoints)							//4
+				covered[3] = true;
 				intersectionPoints[counter] = Point2D.construct(line2.m_xStart,
 						line2.m_yStart);
+			} else {
+				covered[29] = true;	//4 false -> 30
+			}
 			counter++;
+		} else {
+			covered[26] = true;						// 1 false -> branch 27
 		}
 
-		if (!NumberUtils.isNaN(t12)) {
-			if (param1 != null)// if (param1)
+		if (!NumberUtils.isNaN(t12)) {															//5
+			covered[4] = true;														
+			if (param1 != null){// if (param1)													//6
+				covered[5] = true;		
 				param1[counter] = t12;
-			if (param2 != null)// if (param2)
+			}else {
+				covered[31] = true;	//6 false -> 32
+			}
+			if (param2 != null){// if (param2)													//7
+				covered[6] = true;		
 				param2[counter] = 1.0;
-
-			if (intersectionPoints != null)// if (intersectionPoints)
+			}else {
+				covered[32] = true;	//7 false -> 33
+			}
+			if (intersectionPoints != null)// if (intersectionPoints)							//8
+				{
+					covered[7] = true;		
 				intersectionPoints[counter] = Point2D.construct(line2.m_xEnd,
 						line2.m_yEnd);
+				}else {
+					covered[33] = true;	//8 false -> 34
+				}
 			counter++;
+		}else {
+			covered[30] = true;	//5 false -> 31
 		}
 
-		if (counter != 2 && !NumberUtils.isNaN(t21)) {
-			if (!(t11 == 0 && t21 == 0) && !(t12 == 0 && t21 == 1.0))// the "if"
+		if (counter != 2 && !NumberUtils.isNaN(t21)) {										//9
+			covered[8] = true;
+			if (!(t11 == 0 && t21 == 0) && !(t12 == 0 && t21 == 1.0))// the "if"			//10
 																		// makes
 																		// sure
 																		// this
@@ -882,20 +917,38 @@ public final class Line extends Segment implements Serializable {
 																		// already
 																		// calculated
 			{
-				if (param1 != null)// if (param1)
+				covered[9] = true;
+				if (param1 != null){// if (param1)										//11
+					covered[10] = true;
 					param1[counter] = 0;
-				if (param2 != null)// if (param2)
+				}else {
+					covered[36] = true;	//11 false -> 37
+				}
+				if (param2 != null){// if (param2)										//12
+					covered[11] = true;
 					param2[counter] = t21;
-
-				if (intersectionPoints != null)// if (intersectionPoints)
+				}else {
+					covered[37] = true;	//12 false -> 38
+				}
+				if (intersectionPoints != null){// if (intersectionPoints)				//13
+					covered[12] = true;
 					intersectionPoints[counter] = Point2D.construct(
 							line1.m_xStart, line1.m_yStart);
+				}else {
+					covered[38] = true;	//13 false -> 39
+				}
 				counter++;
+			}else {
+				covered[35] = true;	//10 false -> 36
 			}
+
+		}else {
+			covered[34] = true;	//9 false -> 35
 		}
 
-		if (counter != 2 && !NumberUtils.isNaN(t22)) {
-			if (!(t11 == 1.0 && t22 == 0) && !(t12 == 1.0 && t22 == 1.0))// the
+		if (counter != 2 && !NumberUtils.isNaN(t22)) {										//14
+			covered[13] = true;
+			if (!(t11 == 1.0 && t22 == 0) && !(t12 == 1.0 && t22 == 1.0))// the				//15
 																			// "if"
 																			// makes
 																			// sure
@@ -906,20 +959,37 @@ public final class Line extends Segment implements Serializable {
 																			// already
 																			// calculated
 			{
-				if (param1 != null)// if (param1)
+				covered[14] = true;
+				if (param1 != null){// if (param1)											//16
+					covered[15] = true;
 					param1[counter] = 1.0;
-				if (param2 != null)// if (param2)
+				}else {
+					covered[41] = true;	//16 false -> 42
+				}
+				if (param2 != null){// if (param2)											//17
+					covered[16] = true;
 					param2[counter] = t22;
-
-				if (intersectionPoints != null)// if (intersectionPoints)
+				}else {
+					covered[42] = true;	//17 false -> 43
+				}
+				if (intersectionPoints != null){// if (intersectionPoints)					//18
+					covered[17] = true;
 					intersectionPoints[counter] = Point2D.construct(
 							line2.m_xEnd, line2.m_yEnd);
+				}else {
+					covered[43] = true;	//18 false -> 44
+				}
 				counter++;
+			}else {
+				covered[40] = true;	//15 false -> 41
 			}
+		}else {
+			covered[39] = true;	//14 false -> 40
 		}
 
-		if (counter > 0) {
-			if (counter == 2 && param1 != null && param1[0] > param1[1]) {// make
+		if (counter > 0) {																	//19
+			covered[18] = true;
+			if (counter == 2 && param1 != null && param1[0] > param1[1]) {// make			//20
 																			// sure
 																			// the
 																			// intersection
@@ -936,49 +1006,104 @@ public final class Line extends Segment implements Serializable {
 																			// java
 																			// NumberUtils::Swap(param1[0],
 																			// param1[1]);
+				covered[19] = true;
 				double zeroParam1 = param1[0];
 				param1[0] = param1[1];
 				param1[1] = zeroParam1;
 
-				if (param2 != null)// if (param2)
+				if (param2 != null)// if (param2)								//21
 				{
+					covered[20] = true;
 					double zeroParam2 = param2[0];
 					param2[0] = param2[1];
 					param2[1] = zeroParam2;// NumberUtils::Swap(ARRAYELEMENT(param2,
 											// 0), ARRAYELEMENT(param2, 1));
+				}else {
+					covered[46] = true;	//21 false -> 47
 				}
 
-				if (intersectionPoints != null)// if (intersectionPoints)
+				if (intersectionPoints != null)// if (intersectionPoints)		//22
 				{
+					covered[21] = true;
 					Point2D tmp = new Point2D(intersectionPoints[0].x,
 							intersectionPoints[0].y);
 					intersectionPoints[0] = intersectionPoints[1];
 					intersectionPoints[1] = tmp;
+				}else {
+					covered[47] = true;	//22 false -> 48
 				}
+			}else {
+				covered[45] = true;	//20 false -> 46
 			}
-
+			/*for(int i = 0; i<26; i++ ){
+				if (!covered[i] && i != 3 && i != 7 && i != 12 && i != 17 && i != 21){
+					System.out.println("----------------------new -----------------------");
+					System.out.println("branch " + (i+1) + " not covered");
+				}
+				} */
+				if(covered[i]){
+					System.out.println("                        yo                                              ");
+					System.out.println("branch " + (i+1) + " covered status: " + covered[i]);
+				}
 			return counter;
+		}else {
+			covered[44] = true;	//19 false -> 45
 		}
 
 		Point2D params = _intersectHelper1(line1, line2, tolerance);
-		if (NumberUtils.isNaN(params.x))
+		if (NumberUtils.isNaN(params.x))	{									//23
+			covered[22] = true;
+			/*for(int i = 0; i<26; i++){
+				if (i == 1){
+					System.out.println("----------------------new-----------------------");
+					System.out.println("branch " + (i+1) + " covered status: "covered[i]);
+				}
+				}*/
+				if(covered[i]){
+					System.out.println("                        yo                                              ");
+					System.out.println("branch " + (i+1) + " covered status: " + covered[i]);
+				}
+				
 			return 0;
-
-		if (intersectionPoints != null)// if (intersectionPoints)
+		}else {
+			covered[48] = true;	//23 false -> 49
+		}
+		if (intersectionPoints != null)// if (intersectionPoints)				//24
 		{
+			covered[23] = true;
 			intersectionPoints[0] = line1.getCoord2D(params.x);
+		}else {
+			covered[49] = true;	//24 false -> 50
 		}
 
-		if (param1 != null)// if (param1)
+		if (param1 != null)// if (param1)										//25
 		{
+			covered[24] = true;
 			param1[0] = params.x;
+		}else {
+			covered[50] = true;	//25 false -> 51
 		}
 
-		if (param2 != null)// if (param2)
+		if (param2 != null)// if (param2)										//26
 		{
+			covered[25] = true;
 			param2[0] = params.y;
+		}else {
+			covered[51] = true;	//26 false -> 52
 		}
-
+		
+		/*
+		 * for(int i = 0; i<26; i++ ){
+			if (!covered[i] && i != 3 && i != 7 && i != 12 && i != 17 && i != 21){
+				System.out.println("----------------------new ----------------------");
+				System.out.println("branch " + (i+1) + " not covered");
+			}
+            }
+		 */
+        if(covered[i]){
+			System.out.println("                        yo                                              ");
+			System.out.println("branch " + (i+1) + " covered status: " + covered[i]);
+		}
 		return 1;
 	}
 	
