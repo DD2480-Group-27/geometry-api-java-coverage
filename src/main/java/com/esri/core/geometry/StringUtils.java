@@ -26,12 +26,16 @@ import java.util.Locale;
 
 class StringUtils {
 
+    static int[] timesRan = new int[8];
+
     static void appendDouble(double value, int precision,
             StringBuilder stringBuilder) {
         if (precision < 0) {
+            timesRan[0]++;
             precision = 0;
         } else if (precision > 17) {
             precision = 17;
+            timesRan[1]++;
         }
 
         String format = "%." + precision + "g";
@@ -42,22 +46,53 @@ class StringUtils {
         boolean b_found_exponent = false;
 
         for (int i = 0; i < str_dbl.length(); i++) {
+            timesRan[2]++;
             char c = str_dbl.charAt(i);
 
             if (c == '.') {
+
+                timesRan[3]++;
                 b_found_dot = true;
-            } else if (c == 'e' || c == 'E') {
+            } else if (c == 'e') {
+
+                timesRan[4]++;
+                b_found_exponent = true;
+                break;
+            } else if (c == 'E') {
+
+                timesRan[5]++;
                 b_found_exponent = true;
                 break;
             }
         }
 
-        if (b_found_dot && !b_found_exponent) {
-            StringBuilder buffer = removeTrailingZeros_(str_dbl);
-            stringBuilder.append(buffer);
-        } else {
-            stringBuilder.append(str_dbl);
+        if (b_found_dot) {
+
+            timesRan[6]++;
+
+            if (!b_found_exponent) {
+
+                timesRan[7]++;
+
+                StringBuilder buffer = removeTrailingZeros_(str_dbl);
+                stringBuilder.append(buffer);
+            } else {
+                stringBuilder.append(str_dbl);
+
+            } 
         }
+
+
+        //for (int i = 0; i < coverage.length; i++) {
+        //    System.out.println("Decision point " + i + " was " + (coverage[i] ? "taken" : "not taken"));
+        //}
+
+        System.out.println("\n");
+        for (int i = 0; i < timesRan.length; i++) {
+            System.out.println("Branch " + i + " was taken " + timesRan[i] + " times");
+        }
+        System.out.println("\n");
+        
     }
 
     static void appendDoubleF(double value, int decimals,
