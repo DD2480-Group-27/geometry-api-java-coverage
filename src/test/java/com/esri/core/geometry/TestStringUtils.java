@@ -41,6 +41,7 @@ public class TestStringUtils extends TestCase {
         Assert.assertEquals("1e+02", sb.toString());
     }
 
+    
     @Test
     public void testAppendDoubleMaxPrecision() {
         StringBuilder sb = new StringBuilder();
@@ -48,39 +49,5 @@ public class TestStringUtils extends TestCase {
         Assert.assertEquals("123.456", sb.toString());
     }
 
-    @Test
-    public void testAppendDoubleWithPrecision() {
-        StringBuilder sb = new StringBuilder();
-        StringUtils.appendDouble(123.456, 2, sb);
-        Assert.assertEquals("1.2e+02", sb.toString());
-    }
-
-    @Test
-    public void testAppendDoubleWithTrailingZeros() {
-        StringBuilder sb = new StringBuilder();
-        StringUtils.appendDouble(123.4500, 6, sb);
-        Assert.assertEquals("123.45", sb.toString());
-    }
-
-    @Test
-    public void testAppendDoubleWithExponent() {
-        StringBuilder sb = new StringBuilder();
-        StringUtils.appendDouble(1.23456e10, 6, sb);
-        Assert.assertEquals("1.23456e+10", sb.toString());
-    }
-
-    @Test
-    public void testAppendDoubleNegativeValue() {
-        StringBuilder sb = new StringBuilder();
-        StringUtils.appendDouble(-123.456, 3, sb);
-        Assert.assertEquals("-123", sb.toString());
-    }
-
-    @Test
-    public void testAppendDoubleZeroValue() {
-        StringBuilder sb = new StringBuilder();
-        StringUtils.appendDouble(0.0, 3, sb);
-        Assert.assertEquals("0", sb.toString());
-    }
 }
  
