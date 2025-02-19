@@ -38,8 +38,6 @@ final class PointInPolygonHelper {
 	private boolean m_bTestBorder;
 	private boolean m_bBreak;
 	private boolean m_bPointInAnyOuterRingTest;
-	private static boolean coverage_arr_isPointInRing[] = new boolean[20]; // perhaps in unit test/ main?
-		//private sting filename_coverage 
 	
 		private int result() {
 			return m_windnum != 0 ? 1 : 0;
@@ -92,18 +90,26 @@ final class PointInPolygonHelper {
 			}
 			
 			if (bToTheRight) {
-				// to prevent double counting, when the ray crosses a vertex, count
-				// only the segments that are below the ray.
-				if (m_inputPoint.y == seg.getStartXY().y && m_inputPoint.y < seg.getEndXY().y)
+				if (isCrossingVertex(seg, m_inputPoint.y)) {
 					return;
-				else if (m_inputPoint.y == seg.getEndXY().y && m_inputPoint.y < seg.getStartXY().y)
-					return;
-				if (m_bAlternate)
-					m_windnum ^= 1;
-				else 
-					m_windnum += (seg.getStartXY().y > seg.getEndXY().y) ? 1 : -1;
+				}
 			}
+		}			
+		private boolean isCrossingVertex(Segment seg, double y) {
+			// Prevent double counting when the ray crosses a vertex
+			if (y == seg.getStartXY().y && y < seg.getEndXY().y)
+				return true;
+			else if (y == seg.getEndXY().y && y < seg.getStartXY().y)
+				return true;
+		
+			if (m_bAlternate) {
+				m_windnum ^= 1;
+			} else {
+				m_windnum += (seg.getStartXY().y > seg.getEndXY().y) ? 1 : -1;
+			}
+			return false;
 		}
+		
 	
 		public PointInPolygonHelper(boolean bFillRule_Alternate,
 				Point2D inputPoint, double tolerance) {
@@ -279,18 +285,14 @@ final class PointInPolygonHelper {
 			Envelope2D env = new Envelope2D();
 			inputPolygonImpl.queryLooseEnvelope2D(env);
 			env.inflate(tolerance, tolerance);
-			coverage_arr_isPointInRing[0] = true;
 		if (!env.contains(inputPoint)){
-			coverage_arr_isPointInRing[1] = true;
 			return 0;}
 
 		boolean bAltenate = true;
 		PointInPolygonHelper helper = new PointInPolygonHelper(bAltenate,
 				inputPoint, tolerance);
 		
-		coverage_arr_isPointInRing[2] = true;
 		if (quadTree != null) {
-			coverage_arr_isPointInRing[3] = true;
 			Envelope2D queryEnv = new Envelope2D();
 			queryEnv.setCoords(env);
 			queryEnv.xmax = inputPoint.x + tolerance;// no need to query
@@ -308,42 +310,29 @@ final class PointInPolygonHelper {
 
 			for (int qhandle = qiter.next(); qhandle != -1; qhandle = qiter
 					.next()) {
-				coverage_arr_isPointInRing[4] = true;
 				iter.resetToVertex(quadTree.getElement(qhandle), iRing);
 				if (iter.hasNextSegment()) {
-					coverage_arr_isPointInRing[5] = true;
 					if (iter.getPathIndex() != iRing)
-						coverage_arr_isPointInRing[6] = true;
 						continue;
-					coverage_arr_isPointInRing[7] = true;
 					Segment segment = iter.nextSegment();
 					if (helper.processSegment(segment))
-						coverage_arr_isPointInRing[8] = true;
 						return -1; // point on boundary
 				}
 			}
-			coverage_arr_isPointInRing[9] = true;
 			return helper.result();
 		} else {
-			coverage_arr_isPointInRing[10] = true;
 			SegmentIteratorImpl iter = inputPolygonImpl.querySegmentIterator();
 			iter.resetToPath(iRing);
 
 			if (iter.nextPath()) {
-				coverage_arr_isPointInRing[11] = true;
 				while (iter.hasNextSegment()) {
-					coverage_arr_isPointInRing[12] = true;
 					Segment segment = iter.nextSegment();
 					if (helper.processSegment(segment))
-						coverage_arr_isPointInRing[13] = true;
 						return -1; // point on boundary
 				}
 			}
-			coverage_arr_isPointInRing[14] = true;
 			return helper.result();
 		}
-		coverage_arr_isPointInRing[15] = true;
-		// return coverage array
 	}
 
 	public static int isPointInPolygon(Polygon inputPolygon, Point inputPoint,
