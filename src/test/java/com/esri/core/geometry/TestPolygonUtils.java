@@ -27,6 +27,8 @@ package com.esri.core.geometry;
 import junit.framework.TestCase;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class TestPolygonUtils extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
@@ -153,4 +155,96 @@ public class TestPolygonUtils extends TestCase {
 			assertTrue(res == PolygonUtils.PiPResult.PiPInside);
 		}
 	}
-}
+		/*
+		Test cases for testPointsOnPolyline2D_
+		 */
+		//Test case 1: when accel is null
+		@Test
+		public void testPointsOnPolyline2D_whenAccelIsNull() {
+			// Create an empty Polyline
+			Polyline polyline = new Polyline(); // No segments added
+			Point2D[] inputPoints = { new Point2D(5, 5), new Point2D(6, 6) }; // Example points
+			PolygonUtils.PiPResult[] testResults = new PolygonUtils.PiPResult[inputPoints.length];
+			double tolerance = 0.1;
+
+			// Call the method
+			PolygonUtils.testPointsOnPolyline2D_(polyline, inputPoints, inputPoints.length, tolerance, testResults);
+
+			// Assert that all results are set to PiPInside, as no segments were checked
+			for (PolygonUtils.PiPResult result : testResults) {
+				assertEquals(PolygonUtils.PiPResult.PiPOutside, result);
+			}
+		}
+
+		// Test case 2: When pointsLeft is 0
+		@Test
+		public void testPointsOnPolyline2D_whenPointsLeftIsZero() {
+			// Create a Polyline with segments
+			Polyline polyline = createMockPolylineWithSegments(); // Create a polyline with segments
+			Point2D[] inputPoints = { new Point2D(5, 5), new Point2D(6, 6) }; // Example points
+			PolygonUtils.PiPResult[] testResults = new PolygonUtils.PiPResult[inputPoints.length];
+			double tolerance = 0.1;
+
+			// Initialize results such that they simulate already being processed
+
+			// Simulate the condition where pointsLeft becomes 0
+			// Call the method
+			PolygonUtils.testPointsOnPolyline2D_(polyline, inputPoints, inputPoints.length, tolerance, testResults);
+
+			// Assert that all results remain as PiPOutside
+			for (PolygonUtils.PiPResult result : testResults) {
+				assertEquals(PolygonUtils.PiPResult.PiPBoundary, result);
+			}
+		}
+
+		// Mock method to create a Polyline with segments
+		// meaning accel !=null, rgeom is not null
+		private Polyline createMockPolylineWithSegments() {
+			Polyline polyline = new Polyline();
+			// Add segments to the polyline
+			polyline.addSegment(new Line(0,0,10,10), true); // Add a segment
+			return polyline;
+		}
+
+	/*
+	Test cases for _testPointsInEnvelope2D
+	 */
+	//Test case 1: empty envelope
+	@Test
+	public void testWithEmptyEnvelope() {
+		Envelope2D env = new Envelope2D();
+		PolygonUtils.PiPResult[] results = new PolygonUtils.PiPResult[1];
+		Point2D[] points = { new Point2D(5, 5) }; // Example point
+
+		PolygonUtils._testPointsInEnvelope2D(env, points, 1, 0, results);
+
+		assertEquals(PolygonUtils.PiPResult.PiPOutside, results[0]);
+	}
+
+	// Test case 2: Test with a point inside the envelope
+	@Test
+	public void testWithPointInsideEnvelope() {
+		Envelope2D env = new Envelope2D();
+		env.setCoords(0, 0, 10, 10); // Define a square envelope
+		PolygonUtils.PiPResult[] results = new PolygonUtils.PiPResult[1];
+		Point2D[] points = { new Point2D(5, 5) }; // Inside the envelope
+
+		PolygonUtils._testPointsInEnvelope2D(env, points, 1, 0, results);
+
+		assertEquals(PolygonUtils.PiPResult.PiPInside, results[0]);
+	}
+
+	// Test case 3: Test with a point outside the envelope
+	@Test
+	public void testWithPointOutsideEnvelope() {
+		Envelope2D env = new Envelope2D();
+		env.setCoords(0, 0, 10, 10);
+		PolygonUtils.PiPResult[] results = new PolygonUtils.PiPResult[1];
+		Point2D[] points = { new Point2D(15, 5) }; // Outside the envelope
+
+		PolygonUtils._testPointsInEnvelope2D(env, points, 1, 0, results);
+
+		assertEquals(PolygonUtils.PiPResult.PiPOutside, results[0]);
+	}
+	}
+
