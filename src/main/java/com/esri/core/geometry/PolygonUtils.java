@@ -199,9 +199,9 @@ final class PolygonUtils {
 			throw new GeometryException("invalid_call");// GEOMTHROW(invalid_call);
 	}
 
-	private static void _testPointsInEnvelope2D(Envelope2D env2D,
-			Point2D[] inputPoints, int count, double tolerance,
-			PiPResult[] testResults) {
+	static void _testPointsInEnvelope2D(Envelope2D env2D,
+                                        Point2D[] inputPoints, int count, double tolerance,
+                                        PiPResult[] testResults) {
 		if (inputPoints.length < count || testResults.length < count)
 			throw new IllegalArgumentException();
 
