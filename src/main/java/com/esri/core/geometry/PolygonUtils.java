@@ -269,15 +269,14 @@ final class PolygonUtils {
 		MultiPathImpl mp_impl = (MultiPathImpl) poly._getImpl();
 		GeometryAccelerators accel = mp_impl._getAccelerators();
 		RasterizedGeometry2D rgeom = null;
+		if (count <=0)	{return;} //handle the empty test point case
+
+ 		int pointsLeft = count;
+
 		if (accel != null) {
 			rgeom = accel.getRasterizedGeometry();
-		}
-
-		int pointsLeft = count;
-		for (int i = 0; i < count; i++) {
-			test_results[i] = PiPResult.PiPInside;// set to impossible value
-
-			if (rgeom != null) {
+			for (int i = 0; i < count; i++) {
+				test_results[i] = PiPResult.PiPInside;// set to impossible value
 				Point2D input_point = input_points[i];
 				RasterizedGeometry2D.HitType hit = rgeom.queryPointInGeometry(
 						input_point.x, input_point.y);
@@ -286,31 +285,37 @@ final class PolygonUtils {
 					pointsLeft--;
 				}
 			}
-		}
+			if (pointsLeft!=0){
+                processSegmentIntersections(mp_impl, input_points, pointsLeft, tolerance, test_results);
+            }
 
-		if (pointsLeft != 0) {
+		}
+		else { //if accel is null, then rgeom is null, then pointsLEft is always >0, then PiResult always Inside, then always no intersection
+            processSegmentIntersections(mp_impl, input_points, pointsLeft, tolerance, test_results);
+        }
+	}
+
+	static void processSegmentIntersections(MultiPathImpl mp_impl, Point2D[] input_points,
+												int count, double tolerance, PolygonUtils.PiPResult[] test_results) {
+
+
 			SegmentIteratorImpl iter = mp_impl.querySegmentIterator();
-			while (iter.nextPath() && pointsLeft != 0) {
-				while (iter.hasNextSegment() && pointsLeft != 0) {
+			while (iter.nextPath() && count != 0) {
+				while (iter.hasNextSegment() && count != 0) {
 					Segment segment = iter.nextSegment();
-					for (int i = 0; i < count && pointsLeft != 0; i++) {
+					for (int i = 0; i < count && count != 0; i++) {
 						if (test_results[i] == PiPResult.PiPInside) {
 							if (segment.isIntersecting(input_points[i],
 									tolerance)) {
 								test_results[i] = PiPResult.PiPBoundary;
-								pointsLeft--;
-							}
+								count--;
+							} else test_results[i] = PiPResult.PiPOutside;
 						}
 					}
 				}
 			}
-		}
+}
 
-		for (int i = 0; i < count; i++) {
-			if (test_results[i] == PiPResult.PiPInside)
-				test_results[i] = PiPResult.PiPOutside;
-		}
-	}
 
 	static void testPointsOnLine2D(Geometry line, Point2D[] input_points,
 			int count, double tolerance, PolygonUtils.PiPResult[] test_results) {
