@@ -596,10 +596,18 @@ class SweepComparator extends Treap.Comparator {
 		return compareSegments(left, left, right, right);
 	}
 
+	/*
+	 * Refactoring suggestions:
+	 * - Make a helper function called makeEdge for when tryGetCachedEdge returns null. 
+	 *  This would remove the nestled if-statements and many lines. 
+	 * - I would rewrite the ternary operator lines for readability
+	 * - Otherwise I think it might be necessary to have different cases, so I would keep the function as is.
+	*/
+	
 	int compareSegments(int leftElm, int left_vertex, int right_elm,
 			int right_vertex) {
 		SimpleEdge edgeLeft = tryGetCachedEdge_(leftElm);
-		if (edgeLeft == null) {
+		if (edgeLeft == null) { //call makeEdge here instead of following if-statements
 			if (m_vertex_1 == left_vertex)
 				edgeLeft = m_temp_simple_edge_1;
 			else {
@@ -615,7 +623,7 @@ class SweepComparator extends Treap.Comparator {
 			m_vertex_1 = left_vertex;
 
 		SimpleEdge edgeRight = tryGetCachedEdge_(right_elm);
-		if (edgeRight == null) {
+		if (edgeRight == null) { //call makeEdge here instead of following if-statements
 			if (m_vertex_2 == right_vertex)
 				edgeRight = m_temp_simple_edge_2;
 			else {

@@ -34,7 +34,7 @@ for each project, along with reason(s) why you changed to a different one.
 
 ## Refactoring
 
-Plan for refactoring complex code:
+Plan for refactoring complex code: 
 
 Estimated impact of refactoring (lower CC, but other drawbacks?).
 
