@@ -1,0 +1,394 @@
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 2 reached: rgeom is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment available
+Branch 6 reached: test result is not PiPInside (Outside)
+Branch 6 reached: test result is not PiPInside (Outside)
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment available
+Branch 6 reached: test result is not PiPInside (Outside)
+Branch 6 reached: test result is not PiPInside (Outside)
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch 8 reached: result is not PiPInside anymore
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 3
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 3, False case - 1
+Branch 6: True case - 5, False case - 4
+Branch 7: True case - 2, False case - 3
+Branch 8: True case - 1, False case - 2
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 3, False case - 1
+Branch 6: True case - 3, False case - 0
+Branch 7: True case - 0, False case - 3
+Branch 8: True case - 1, False case - 0
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 0, False case - 1
+Branch 8: True case - 1, False case - 0
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 0, False case - 1
+Branch 8: True case - 1, False case - 0
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 0, False case - 1
+Branch 8: True case - 1, False case - 0
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 0, False case - 1
+Branch 8: True case - 1, False case - 0
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 2 reached: rgeom is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment don't intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch 8 reached: result is not PiPInside anymore
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 3
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 3, False case - 0
+Branch 7: True case - 2, False case - 1
+Branch 8: True case - 1, False case - 2
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 8 reached: result remains PiPInside
+Branch 8 reached: result remains PiPInside
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 2
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 0, False case - 0
+Branch 6: True case - 0, False case - 0
+Branch 7: True case - 0, False case - 0
+Branch 8: True case - 2, False case - 0
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 2
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 2, False case - 0
+Branch 7: True case - 2, False case - 0
+Branch 8: True case - 0, False case - 2
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
+---------------------------------------------------
+Branch 1 reached: accel is null
+Branch 2 reached: rgeom is null
+Branch 4 reached: points left not zero
+Branch 5 reached: next segment available
+Branch 6 reached: test result is PiPInside
+Branch 7 reached: segment intersects
+Branch 5 reached: next segment not available
+Branch 8 reached: result is not PiPInside anymore
+Branch Coverage Summary:
+Branch 1: True case - 1, False case - 0
+Branch 2: True case - 0, False case - 1
+Branch 3: True case - 0, False case - 0
+Branch 4: True case - 1, False case - 0
+Branch 5: True case - 1, False case - 1
+Branch 6: True case - 1, False case - 0
+Branch 7: True case - 1, False case - 0
+Branch 8: True case - 0, False case - 1
+Branch 9: True case - 0, False case - 0
+---------------------------------------------------
