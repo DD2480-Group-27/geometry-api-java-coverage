@@ -6,6 +6,7 @@ import org.junit.Test;
 
 public class TestIntersectLineLine {
     
+    //covers branch 4 and 8
     @Test
     public void testIntersectionPointsNotNull()
     {
