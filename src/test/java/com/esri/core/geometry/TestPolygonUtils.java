@@ -25,9 +25,10 @@
 package com.esri.core.geometry;
 
 import junit.framework.TestCase;
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.util.Arrays;
+
+import org.junit.Test;
 
 public class TestPolygonUtils extends TestCase {
 	@Override
@@ -155,6 +156,43 @@ public class TestPolygonUtils extends TestCase {
 			assertTrue(res == PolygonUtils.PiPResult.PiPInside);
 		}
 	}
+
+	@Test
+	public static void testPointInRing(){
+		Polygon polygon = new Polygon();
+		polygon.startPath(-200, -100);
+		polygon.lineTo(200, -100);
+		polygon.lineTo(200, 100);
+		polygon.lineTo(-190, 100);
+		polygon.lineTo(-190, 90);
+		polygon.lineTo(-200, 90);
+
+		// hole
+		polygon.startPath(-100, 50);
+		polygon.lineTo(100, 50);
+		polygon.lineTo(100, -40);
+		polygon.lineTo(90, -40);
+		polygon.lineTo(90, -50);
+		polygon.lineTo(-100, -50);
+
+		Point2D testPointIn1 = new Point2D(1, 2);
+		Point2D testPointIn2 = new Point2D(100, 200);
+		Point2D testPointIn3 = new Point2D(0, 50);
+		PolygonUtils.PiPResult res;
+
+		Arrays.fill(PointInPolygonHelper.coverage_arr_isPointInRing, false);
+
+
+		res = PolygonUtils.isPointInRing2D(polygon, 1, testPointIn1, 1) ;
+		assertTrue(res == PolygonUtils.PiPResult.PiPInside);
+		res = PolygonUtils.isPointInRing2D(polygon, 1, testPointIn2, 1) ;
+		assertTrue(res == PolygonUtils.PiPResult.PiPOutside);
+		res = PolygonUtils.isPointInRing2D(polygon, 1, testPointIn3, 1) ;
+		assertTrue(res == PolygonUtils.PiPResult.PiPInside);
+		System.out.println("Coverage for isPointInRing: " + Arrays.toString(PointInPolygonHelper.coverage_arr_isPointInRing));
+		// No tests for quadTree != null
+	}
+}
 		/*
 		Test cases for testPointsOnPolyline2D_
 		 */
@@ -246,5 +284,5 @@ public class TestPolygonUtils extends TestCase {
 
 		assertEquals(PolygonUtils.PiPResult.PiPOutside, results[0]);
 	}
-	}
+}
 

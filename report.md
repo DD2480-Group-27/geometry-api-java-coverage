@@ -1,26 +1,32 @@
 # Report for assignment 3
 
-This is a template for your report. You are free to modify it as needed.
-It is not required to use markdown for your report either, but the report
-has to be delivered in a standard, cross-platform format.
-
 ## Project
 
-Name:
+Name: geometry-api-java
 
-URL:
+URL: [https://github.com/Esri/geometry-api-java](https://github.com/Esri/geometry-api-java)
 
-One or two sentences describing it
+This API makes it easier to handle and analyze geospatial data in custom applications and big data platforms, improving their ability to work with location information.
 
 ## Onboarding experience
 
-Did it build and run as documented?
-    
-See the assignment for details; if everything works out of the box,
-there is no need to write much here. If the first project(s) you picked
-ended up being unsuitable, you can describe the "onboarding experience"
-for each project, along with reason(s) why you changed to a different one.
+The project in itself is just an API so there is not any so called "running" the project.
+The project is maven-based so we will be using maven related commands such as
+```bash
+mvn clean compile
+mvn test
+```
+The project was delivered with java 1.6 but when running `mvn clean compile` the compilation plugin from maven is not supporting java versions older then JAVA 8 (JDK 1.8) so we changed this in the xml configuration file.
 
+Besides this quick fix the tests were running fine from a `mvn clean test` with no failing tests.
+
+To confim the project choice we then went on running a test coverage tool on it, we choosed [Open Clover](https://openclover.org/) from Atlassian. The documentation of the tools was missleading and with help of a TA we got it to work and observed a coverage result of 69.9% with the original repository by running the command `mvn clean clover:setup test clover:aggregate clover:clover`.
+
+This led us to choose this project but also the fact that this project uses maven (with which our group already worked on earlier assignments) and JUnit4 as testing library (which we were also using in earlier assignment for this same course).
+
+Note that since the addition of Open Clover to the maven configuration file, the test run with `mvn clean test` are failing because of what it appears to be a conflict between clover and the maven-javadoc-plugin used by the repo for documentation purposes.
+
+A second noticeable point, since we are talking of an API some of its public java interfaces are documented it is however not the case of many classes. There is thus a further difficulty in understanding the code in order to improve its quality and coverage while staying mathematically correct.
 
 ## Complexity
 
@@ -32,59 +38,72 @@ for each project, along with reason(s) why you changed to a different one.
 4. Are exceptions taken into account in the given measurements?
 5. Is the documentation clear w.r.t. all the possible outcomes?
 
+The helper function doOne in the file PointInPolygonHelper.java was studied. Both the manual calculation and lizard got the cyclomatic complexity of the function to 21. Being just 57 lines the function is not particularly long despite the cyclomatic complexity. The function checks if a point is inside of a polygon, on the border of a polygon or outside of a polygon. As no exceptions exist in fuction they are not accouted for in the complexity. Most parts of the function are well documented, but the method to check if the point is inside or outside a polygon using the "odd-even rule" could be better documented
+
+
+
 ## Refactoring
+The function was refactored into multiple functions to reduce cyclomatic complexity.
+The reduction can be expressed with the following metrics
+|Sample time|NLOC|CCN|token|PARAM|length|
+|:---:|---:|---:|---:|---:|---:|
+|Before|43|21|348|1|57|
+|After|9|3|48|3|11| ///Update!!!
 
-Plan for refactoring complex code:
 
-Estimated impact of refactoring (lower CC, but other drawbacks?).
-
-Carried out refactoring (optional, P+):
-
-git diff ...
+The code that highly increases the complexity here is the char by char comparison that can be replaced with null-safe String comparison but also with a simple call to `String::startsWith()` since the `overlaps_()` method is private and only called from a context that ensures non null String input.
 
 ## Coverage
 
 ### Tools
 
-Document your experience in using a "new"/different coverage tool.
-
-How well was the tool documented? Was it possible/easy/difficult to
-integrate it with your build environment?
+To start this second part we first generated an general coverage report to know on what parts of the code to focus. For this we used Open Clover as mentionned before. It generates a browsable report with key metrics on a dashboard and an intuitive interface to see class and method related coverage.
+As explained above, by the use of one single command the report was generated using all the tests in their last version and giving per-line coverage adding the number of times the given line is indeed executed (0 if never).
 
 ### Your own coverage tool
 
-Show a patch (or link to a branch) that shows the instrumented code to
-gather coverage measurements.
-
-The patch is probably too long to be copied here, so please add
-the git command that is used to obtain the patch instead:
-
-git diff ...
-
-What kinds of constructs does your tool support, and how accurate is
-its output?
+I implemented a DIY coverage tool as shown in the patch that can be created with the command below.
+```bash
+git format-patch -1 350dea23460a53c1cecf86c4eaff275bd8cf949e
+```
+It works by logging into a file and then map the log file into a report with a python script.
+The report can be generated with the following commands:
+```bash
+mvn clean compile
+python3 coverage-report.py
+```
+It will be printed out the report in the terminal
 
 ### Evaluation
 
 1. How detailed is your coverage measurement?
 
+The shown measurement consists of how many times a branch has been taken.
+In order to provide a report as readable as possible, it is the java code of method with annotation at the start and end of each branch (including right before return statement).
+In this case, the method contains 9 key points where the coverage reports the umber of times the execution went there.
+
 2. What are the limitations of your own tool?
+
+It would not consider ternary operator if there were any and has no handling of java exceptions meaning that if the execution were to stop in the middle of the method, there would a uncoherent value on some branches.
+The big drawback of my tool is that it is absolutly not generic. It is constrained to cover the overlaps_() method.
 
 3. Are the results of your tool consistent with existing coverage tools?
 
+The results of my coverage tool are consitent with the ones from Open Clover meaning both of them detect 99 calls of the overlaps_() method and trace them the same way.
+
 ## Coverage improvement
 
-Show the comments that describe the requirements for the coverage.
+Comments showing required input can be seen added in [commit a9c41b7](https://github.com/DD2480-Group-27/geometry-api-java-coverage/commit/a9c41b787c8f34c52e7c8bfe04a04c445b79b925)
 
-Report of old coverage: [link]
+Report of old coverage: [link](https://github.com/DD2480-Group-27/geometry-api-java-coverage/blob/edgar/feat/coverage-overlaps_/coverage-before.txt)
 
-Report of new coverage: [link]
+Report of new coverage: [link](https://github.com/DD2480-Group-27/geometry-api-java-coverage/blob/edgar/feat/coverage-overlaps_/coverage-after.txt)
 
-Test cases added:
+The following [test cases](https://github.com/DD2480-Group-27/geometry-api-java-coverage/blob/edgar/feat/coverage-overlaps_/src/test/java/com/esri/core/geometry/TestRelationalOperationsMatrix.java) have been added:
+- TestRelationalOperationsMatrix::testRelateOverlapLines
+- TestRelationalOperationsMatrix::testRelateOverlapPoints
+- TestRelationalOperationsMatrix::testRelateOverlapPolygons
 
-git diff ...
-
-Number of test cases added: two per team member (P) or at least four (P+).
 
 ## Self-assessment: Way of working
 
