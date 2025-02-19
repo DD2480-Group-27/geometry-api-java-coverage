@@ -43,66 +43,48 @@ The helper function doOne in the file PointInPolygonHelper.java was studied. Bot
 
 
 ## Refactoring
-The function was refactored into multiple functions to reduce cyclomatic complexity.
+The function was refactored by putting part of it into a helper function for easier readibility.
 The reduction can be expressed with the following metrics
 |Sample time|NLOC|CCN|token|PARAM|length|
 |:---:|---:|---:|---:|---:|---:|
 |Before|43|21|348|1|57|
-|After|9|3|48|3|11| ///Update!!!
+|After|33|16|262|1|43| 
 
 
-The code that highly increases the complexity here is the char by char comparison that can be replaced with null-safe String comparison but also with a simple call to `String::startsWith()` since the `overlaps_()` method is private and only called from a context that ensures non null String input.
 
 ## Coverage
 
+
 ### Tools
 
-To start this second part we first generated an general coverage report to know on what parts of the code to focus. For this we used Open Clover as mentionned before. It generates a browsable report with key metrics on a dashboard and an intuitive interface to see class and method related coverage.
+To start this second part we first generated a general coverage report to know on what parts of the code to focus. For this we used Open Clover as mentionned before. It generates a browsable report with key metrics on a dashboard and an intuitive interface to see class and method related coverage.
 As explained above, by the use of one single command the report was generated using all the tests in their last version and giving per-line coverage adding the number of times the given line is indeed executed (0 if never).
 
 ### Your own coverage tool
 
-I implemented a DIY coverage tool as shown in the patch that can be created with the command below.
-```bash
-git format-patch -1 350dea23460a53c1cecf86c4eaff275bd8cf949e
-```
-It works by logging into a file and then map the log file into a report with a python script.
-The report can be generated with the following commands:
-```bash
-mvn clean compile
-python3 coverage-report.py
-```
-It will be printed out the report in the terminal
+The DIY coverage tool for isPointInRing() was implemented as a static array of boolean values that turn true if the branch has been visited. The summarized results from all tests in the testPointInRing() to see what branches were reached and which weren't, this array is then printed in the test results.  
+
 
 ### Evaluation
 
 1. How detailed is your coverage measurement?
 
-The shown measurement consists of how many times a branch has been taken.
-In order to provide a report as readable as possible, it is the java code of method with annotation at the start and end of each branch (including right before return statement).
-In this case, the method contains 9 key points where the coverage reports the umber of times the execution went there.
+The measurement consists of which branches has been taken. The coverage is entierly up to the user as you have to manually add coverage points which is also limited to what branches has been reached and nothing more. In this case, the method contains 15 key points where the coverage reports if the branch has been reached.
 
 2. What are the limitations of your own tool?
 
-It would not consider ternary operator if there were any and has no handling of java exceptions meaning that if the execution were to stop in the middle of the method, there would a uncoherent value on some branches.
-The big drawback of my tool is that it is absolutly not generic. It is constrained to cover the overlaps_() method.
+The biggest limitation is that it is completly manual and for now only covers one function, but the coverage also only reveals which checkpoints has been reached and not how many "if" checks were between each checkpoint and how much code or functionality each checkpoint covers.
 
 3. Are the results of your tool consistent with existing coverage tools?
 
-The results of my coverage tool are consitent with the ones from Open Clover meaning both of them detect 99 calls of the overlaps_() method and trace them the same way.
+The result in OpenClover is not consistent with my DIY coverage, OpenClover does not detect it at all. But VScode and the DIY coveerage tools says that half the branches are cover compared to none before additional tests were added
 
 ## Coverage improvement
 
-Comments showing required input can be seen added in [commit a9c41b7](https://github.com/DD2480-Group-27/geometry-api-java-coverage/commit/a9c41b787c8f34c52e7c8bfe04a04c445b79b925)
+No prior branch coverage for isPointInRing
+Added tests for isPointInRing improving branch coverage in 7/15 test spots
+- TestPolygonUtils::testPointInRing
 
-Report of old coverage: [link](https://github.com/DD2480-Group-27/geometry-api-java-coverage/blob/edgar/feat/coverage-overlaps_/coverage-before.txt)
-
-Report of new coverage: [link](https://github.com/DD2480-Group-27/geometry-api-java-coverage/blob/edgar/feat/coverage-overlaps_/coverage-after.txt)
-
-The following [test cases](https://github.com/DD2480-Group-27/geometry-api-java-coverage/blob/edgar/feat/coverage-overlaps_/src/test/java/com/esri/core/geometry/TestRelationalOperationsMatrix.java) have been added:
-- TestRelationalOperationsMatrix::testRelateOverlapLines
-- TestRelationalOperationsMatrix::testRelateOverlapPoints
-- TestRelationalOperationsMatrix::testRelateOverlapPolygons
 
 
 ## Self-assessment: Way of working
