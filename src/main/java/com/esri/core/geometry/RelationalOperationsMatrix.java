@@ -23,6 +23,12 @@
  */
 package com.esri.core.geometry;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+
 class RelationalOperationsMatrix {
 	private TopoGraph m_topo_graph;
 	private int[] m_matrix;
@@ -1248,30 +1254,60 @@ class RelationalOperationsMatrix {
 
 	// Checks whether the scl string is the overlaps relation.
 	private static boolean overlaps_(String scl, int dim_a, int dim_b) {
-		if (dim_a == dim_b) {
-			if (dim_a != 1) {
+		printOutTakenBranch(0);
+		if (dim_a == dim_b) {		// Have same dimension
+			printOutTakenBranch(1);
+			if (dim_a != 1) {			// Geometry other than Line.java
+				printOutTakenBranch(2);
 				// Valid for area-area, Point-Point
 				if (scl.charAt(0) == 'T' && scl.charAt(1) == '*'
 						&& scl.charAt(2) == 'T' && scl.charAt(3) == '*'
 						&& scl.charAt(4) == '*' && scl.charAt(5) == '*'
 						&& scl.charAt(6) == 'T' && scl.charAt(7) == '*'
-						&& scl.charAt(8) == '*')
+						&& scl.charAt(8) == '*') {			// Match the described String "T*T***T**"
+					printOutTakenBranch(3);
 					return true;
-
+				}
+				printOutTakenBranch(4);
 				return false;
 			}
-
+			printOutTakenBranch(5);
 			// Valid for Line-Line
 			if (scl.charAt(0) == '1' && scl.charAt(1) == '*'
 					&& scl.charAt(2) == 'T' && scl.charAt(3) == '*'
 					&& scl.charAt(4) == '*' && scl.charAt(5) == '*'
 					&& scl.charAt(6) == 'T' && scl.charAt(7) == '*'
-					&& scl.charAt(8) == '*')
+					&& scl.charAt(8) == '*') {			// Match the described String "1*T***T**"
+				printOutTakenBranch(6);
 				return true;
+			}
+			printOutTakenBranch(7);
 		}
-
+		printOutTakenBranch(8);
 		return false;
 	}
+
+	private static void printOutTakenBranch(int id){
+		try {
+			String path = System.getProperty("java.io.tmpdir");
+			new File(path).mkdir();
+			path += "/diy-coverage";
+			new File(path).mkdir();
+			path += "/overlaps_";
+			new File(path).mkdir();
+			path += "/log";
+			File logFile = new File(path);
+			logFile.createNewFile();
+			BufferedWriter bw = new BufferedWriter(new FileWriter(logFile, true));
+			bw.write(id + "\n");
+			bw.flush();
+			bw.close();
+		} catch (IOException e) {
+			System.out.println(Arrays.toString(e.getStackTrace()));
+			System.out.println(e.getMessage());
+			System.err.println("ERROR while trying to write coverage into log file");
+        }
+    }
 
 	// Marks each cluster of the topoGraph as belonging to an interior vertex of
 	// the geometry and/or a boundary index of the geometry.
