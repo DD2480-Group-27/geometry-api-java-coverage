@@ -28,6 +28,9 @@ package com.esri.core.geometry;
 import com.esri.core.geometry.VertexDescription.Semantics;
 
 import java.io.Serializable;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import static com.esri.core.geometry.SizeOf.SIZE_OF_LINE;
 
@@ -839,13 +842,22 @@ public final class Line extends Segment implements Serializable {
 		return counter;
 	}
 
-	//inte 8, 13, 18, 22, 47
+	//inte 4, 8, 13, 18, 22, 47
 	static int _intersectLineLine(Line line1, Line line2,														
 			Point2D[] intersectionPoints, double[] param1, double[] param2,
 			double tolerance) {
 		// _ASSERT(!param1 && !param2 || param1);
 		int counter = 0;
-		int i = 3;
+		//TOOOOOOOOOOOOOOOOOOOOOOOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+		
+		try {
+			FileWriter coverageWriter;
+			File file = new File("coverage.txt");
+			file.createNewFile();
+			coverageWriter = new FileWriter(file);
+		
+		//TOOOOOOOOOOOOOOOOOOOOOOOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+		
 		// Test the end points for exact coincidence.
 		double t11 = line1._intersection(line2.getStartXY(), tolerance, false);
 		double t12 = line1._intersection(line2.getEndXY(), tolerance, false);
@@ -1035,16 +1047,17 @@ public final class Line extends Segment implements Serializable {
 			}else {
 				covered[45] = true;	//20 false -> 46
 			}
-			/*for(int i = 0; i<26; i++ ){
-				if (!covered[i] && i != 3 && i != 7 && i != 12 && i != 17 && i != 21){
-					System.out.println("----------------------new -----------------------");
-					System.out.println("branch " + (i+1) + " not covered");
-				}
-				} */
-				if(covered[i]){
-					System.out.println("                        yo                                              ");
-					System.out.println("branch " + (i+1) + " covered status: " + covered[i]);
-				}
+			//TOOL_________________________________________________________________________
+			
+		
+			for(int i = 0; i<covered.length; i++ ){
+			if (!covered[i]){
+			coverageWriter.write(" branch " + (i+1) + " not covered ");
+			}
+            }
+			coverageWriter.close();
+			
+			//_________________________________________________________________________
 			return counter;
 		}else {
 			covered[44] = true;	//19 false -> 45
@@ -1053,17 +1066,16 @@ public final class Line extends Segment implements Serializable {
 		Point2D params = _intersectHelper1(line1, line2, tolerance);
 		if (NumberUtils.isNaN(params.x))	{									//23
 			covered[22] = true;
-			/*for(int i = 0; i<26; i++){
-				if (i == 1){
-					System.out.println("----------------------new-----------------------");
-					System.out.println("branch " + (i+1) + " covered status: "covered[i]);
-				}
-				}*/
-				if(covered[i]){
-					System.out.println("                        yo                                              ");
-					System.out.println("branch " + (i+1) + " covered status: " + covered[i]);
-				}
-				
+			//TOOL_________________________________________________________________________
+			
+			for(int i = 0; i<covered.length; i++ ){
+			if (!covered[i]){
+				coverageWriter.write(" branch " + (i+1) + " not covered ");
+			}
+            }
+				coverageWriter.close();
+			
+			//_________________________________________________________________________
 			return 0;
 		}else {
 			covered[48] = true;	//23 false -> 49
@@ -1092,19 +1104,21 @@ public final class Line extends Segment implements Serializable {
 			covered[51] = true;	//26 false -> 52
 		}
 		
-		/*
-		 * for(int i = 0; i<26; i++ ){
-			if (!covered[i] && i != 3 && i != 7 && i != 12 && i != 17 && i != 21){
-				System.out.println("----------------------new ----------------------");
-				System.out.println("branch " + (i+1) + " not covered");
-			}
-            }
-		 */
-        if(covered[i]){
-			System.out.println("                        yo                                              ");
-			System.out.println("branch " + (i+1) + " covered status: " + covered[i]);
+		//TOOL_________________________________________________________________________
+		
+		for(int i = 0; i<covered.length; i++ ){
+		if (!covered[i]){
+			coverageWriter.write(" branch " + (i+1) + " not covered ");
 		}
+		}
+			coverageWriter.close();
+		} catch (IOException e) {
+			System.out.println("A file error occurred.");
+			  e.printStackTrace();
+		}
+		//_________________________________________________________________________
 		return 1;
+	
 	}
 	
     @Override
