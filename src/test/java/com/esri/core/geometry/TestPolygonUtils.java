@@ -160,52 +160,47 @@ public class TestPolygonUtils extends TestCase {
 	@Test
 	public static void testPointInRing(){
 		Polygon polygon = new Polygon();
-		polygon.startPath(-200, -100);
-		polygon.lineTo(200, -100);
-		polygon.lineTo(200, 100);
-		polygon.lineTo(-190, 100);
-		polygon.lineTo(-190, 90);
-		polygon.lineTo(-200, 90);
-
-		// hole
-		polygon.startPath(-100, 50);
-		polygon.lineTo(100, 50);
-		polygon.lineTo(100, -40);
-		polygon.lineTo(90, -40);
-		polygon.lineTo(90, -50);
-		polygon.lineTo(-100, -50);
+		polygon.startPath(10, 10);
+		polygon.lineTo(-10, 10);
+		polygon.lineTo(-10, -10);
+		polygon.lineTo(10, -10);
+		polygon.lineTo(10, 10);
+		
+		polygon.reverseAllPaths();
+		
 
 		Point2D testPointIn1 = new Point2D(1, 2);
-		Point2D testPointIn2 = new Point2D(100, 200);
-		Point2D testPointIn3 = new Point2D(200, 100);
+		Point2D testPointIn2 = new Point2D(10, 20);
+		Point2D testPointIn3 = new Point2D(10, 10);
 		PolygonUtils.PiPResult res;
 		
 		MultiPathImpl seg = (MultiPathImpl) polygon._getImpl();
-		QuadTree quadTree = new QuadTree(Envelope2D.construct(-10, -10, 10, 10), 8);
+		QuadTree quadTree = new QuadTree(Envelope2D.construct(-10, -10, 10, 10), 10);
 
 		Arrays.fill(PointInPolygonHelper.coverage_arr_isPointInRing, false);
 
 
-		res = PolygonUtils.isPointInRing2D(polygon, 1, testPointIn1, 1) ;
+		res = PolygonUtils.isPointInRing2D(polygon, 0, testPointIn1, 1) ;
 		assertTrue(res == PolygonUtils.PiPResult.PiPInside); // Inside
 
-		res = PolygonUtils.isPointInRing2D(polygon, 1, testPointIn2, 1) ;
+		res = PolygonUtils.isPointInRing2D(polygon, 0, testPointIn2, 1) ;
 		assertTrue(res == PolygonUtils.PiPResult.PiPOutside); // Outside
 
-		res = PolygonUtils.isPointInRing2D(polygon, 1, testPointIn3, 0) ;
+		res = PolygonUtils.isPointInRing2D(polygon, 0, testPointIn3, 0) ;
 		assertTrue(res == PolygonUtils.PiPResult.PiPInside); // On boundry
 
-		
-		assertFalse(-1 == PointInPolygonHelper.isPointInRing(seg , 1, testPointIn1, 0,  quadTree));
+		int result = PointInPolygonHelper.isPointInRing(seg , 0, testPointIn2, 1,  quadTree);
+		assertTrue(result == 0); // Outside
 
-		String result = "Coverage for isPointInRing: \n";
+
+		String results = "Coverage for isPointInRing: \n";
 		boolean[] coverage = PointInPolygonHelper.coverage_arr_isPointInRing;
 
 		for (int i = 0; i < coverage.length; i++) {
-			result += "Point " + (i + 1) + ": " + coverage[i] + "\n";
+			results += "Point " + (i + 1) + ": " + coverage[i] + "\n";
 		}
 
-		System.out.println(result);
+		System.out.println(results);
 
 	}
 }

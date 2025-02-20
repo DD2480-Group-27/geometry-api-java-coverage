@@ -419,7 +419,6 @@ final class PointInPolygonHelper {
 			throw GeometryException.GeometryInternalError();
 		if (res == 1)
 			return true;
-
 		return false;
 	}
 
