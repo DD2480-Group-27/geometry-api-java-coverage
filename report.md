@@ -82,7 +82,7 @@ The result in OpenClover is not consistent with my DIY coverage, OpenClover does
 ## Coverage improvement
 
 No prior branch coverage for isPointInRing
-Added tests for isPointInRing improving branch coverage in 7/15 test spots
+Added tests for isPointInRing improving branch coverage in 8/15 test spots
 - TestPolygonUtils::testPointInRing
 
 
