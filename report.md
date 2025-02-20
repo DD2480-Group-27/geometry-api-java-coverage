@@ -450,16 +450,16 @@ The ests need to setup a envelope for testing, but no extra interfaces are neede
 
 ## Self-assessment: Way of working
 
-Current state according to the Essence standard: ...
+Current state according to the Essence standard: In-place
 
-Was the self-assessment unanimous? Any doubts about certain items?
+Our team has established clear practices and tools that everyone uses to complete their tasks. At the start of this week's lab, we agreed on the practices and tasks during our first meeting. Each member then worked independently on their assigned tasks. Two days before the presentation, we reconvened to review each other's work, reassigned tasks as needed, and merged everything into a single cohesive report.
 
-How have you improved so far?
+So far, we have improved in several areas. The work allocation and workflow for one lab are now clearly defined, which has enhanced our productivity and collaboration. Team members feel more confident in their roles, and the initial meeting has set a solid foundation for task management. Additionally, the practice of reconvening before presentations has helped us identify gaps and strengthen our final reports.
 
-Where is potential for improvement?
+We still have room for improvement regarding consistency in task execution. To address this, we could implement more regular check-ins (probably through zoom since now we only have in-person meetings) throughout the lab process, allowing team members to share progress and challenges more frequently. Additionally, creating shared templates or guidelines for specific tasks could help ensure a more uniform approach and enhance the overall quality of our outputs.
 
 ## Overall experience
 
-What are your main take-aways from this project? What did you learn?
-
-Is there something special you want to mention here?
+1. Use of Clover Library: Several team members gained valuable experience using the Clover library for code coverage analysis, helping us measure the effectiveness of our tests and identify areas that needed more attention.
+2. Refactoring Techniques: We learned various techniques in refactoring, improving our code quality and maintainability. Understanding how to restructure existing code without changing its functionality was a significant skill development.
+3. Writing Specific Test Cases: We also learned how to write specific test cases aimed at achieving branch coverage. This skill enhanced our testing strategy, ensuring that we thoroughly tested different execution paths in our code.
