@@ -87,6 +87,86 @@ The documentation is almost inexistant but the method corresponds to the single 
 For a calculation of the cyclomatic complexity by hand, we can infer that lizard is considering each comparison with `scl.charAt()` as a decision point since they are each a point where the equality `==` can evaluate either to `true` or `false`.
 Thus we have the initial `if (dim_a == dim_b)`, then the `if (dim_a != 1)` and twice the nine decision points with the `chartAt()` call. The formula for the CC can be written as `CC=E−N+2P` with E the number of edges in the control flow graph, N the number of nodes in the same graph and P the number of connected components. This formula can be rewritten as following `CC=(Number of decision points)+1`. Here we have:`CC = 1 + 1 + 2*9 + 1 = 21` before reduction.
 
+### Yoyo - function: testPointsOnPolyline2D_
+I choosed the method
+`testPointsOnPolyline2D_` in the file `PolygonUtils.java` from package com.esri.core.geometry. The complexity  can be expressed with the following metrics
+
+|  | NLOC | CCN | token | PARAM | length |
+| --- | --- | --- | --- | --- | --- |
+| Before reduction | 43     | 16 | 306 | 5 | 47 |
+
+By lizard, the CCN is 16. However, when I manually count it, it is only 12.
+
+Nodes (N):
+
+1. Start
+2. Get mp_impl
+3. Get accel
+4. Check accel null
+5. Get rgeom (if accel not null)
+6. Initialize pointsLeft
+7. Initialize first loop i
+8. Set test_results[i]
+9. Check rgeom null
+10. Get input_point
+11. Query point in geometry
+12. Check hit type
+13. Update test_results and pointsLeft
+14. Check pointsLeft
+15. Get iterator
+16. Check iter.nextPath
+17. Check iter.hasNextSegment
+18. Get next segment
+19. Inner loop check
+20. Check test_results[i]
+21. Check intersection
+22. Set to boundary
+23. Final loop initialization
+24. Check test_results[i] final
+25. Set to outside
+26. End
+
+Total Nodes (N) = 26
+
+Edges (E):
+
+- Main sequence connections: 25
+- Additional paths from:
+	- accel null check: +1
+	- rgeom null check: +1
+	- hit type check: +1
+	- pointsLeft check: +1
+	- iter.nextPath loop: +2 (the and operator)
+	- iter.hasNextSegment loop: +2 (the and operator)
+	- test_results check in loop: +2 (the and operator)
+	- intersection check: +1
+	- final check for PiPInside: +1
+
+Total Edges (E) = 37
+
+V(G) = E - N + 2P
+
+= 37 - 26 + 2(1)
+
+= 37 - 26 + 2
+
+= 13
+
+This discrepancy comes from the how liazrd counts for the while loops and for loops (and the nested while loops) and the and operators inside the while loops. They consider the while and for loops as an extra decision point.
+
+The function tests if points lie on a polyline by:
+
+- First using `RasterizedGeometry2D` to determine the `HitType`
+- Then checking segment intersections
+- Finally defaulting remaining points to "outside"
+- The array`test_results`store the `PiResult` (`PiPResult.PiPBoundary` means on the polyline) for each test point in `input_points`
+
+The function logic is not very complex, it is just the original code tried to put all steps to be in one function that the function have many nested loops and if statements. However, it is worth noting that the part for testing the segment intersections is indeed neccessary to have such nested loops.
+
+There are no exceptions in the function so no exceptions are taken into measurement of the complexity calculations.
+
+There is apparently no documentation for this function, but it does have a short description of the [`PolygonUtils.java`](http://PolygonUtils.java) class. So at the first glance, the logic is not easy to understand, you need to go through the related function calls/ class structures inside this function to understand what it is doing.
+
 ## Refactoring
 
 ### Linus - function: appendDouble
@@ -157,6 +237,26 @@ The reduction can be expressed with the following metrics
 ### Edgar - function: overlaps_
 
 The code that highly increases the complexity here is the char by char comparison that can be replaced with null-safe String comparison but also with a simple call to `String::startsWith()` since the `overlaps_()` method is private and only called from a context that ensures non null String input.
+
+### Yoyo - function: testPointsOnPolyline2D_
+
+As mentioned in Complexity part, the code is having high CNN because it didn’t handle the `rgeom` case well and it puts everything inside the single function.
+
+Plan
+
+1. Handle the case for empty test points (this is important becuase later when we do the branch for `accel==null` , direct  testing of segment interesection can be performed without having the if statement for `if pointsLeft !=0`
+2. Combine the steps into 2 cases: one for `accel != null` , one for `accel == null` (we know that when accel == null, rgeom==null, then pointsLeft will always be == count because we don’t go into the `if rgeom !=null` case.
+3. Split the segment intersection processing into a new smaller function named `processSegmentIntersections` so that in the main method, it can be called for both `accel== null` and `not null` cases, reducing a branch.
+
+Results (for method`testPointsOnPolyline2D_`)
+
+|  | NLOC | CCN | token | PARAM | length |
+| --- | --- | --- | --- | --- | --- |
+| Before | 43 | 16 | 306 | 5 | 47 |
+| After | 27     | 6 | 194 | 5 | 30 |
+| `processSegmentIntersections` | 20    | 9 | 145 | 5 | 22 |
+
+As seen, both NLOC and CCN has reduced, in particular the CCN is reduced by 62.5%.
 
 ## Coverage
 
@@ -250,6 +350,29 @@ The big drawback of my tool is that it is absolutly not generic. It is constrain
 
 The results of my coverage tool are consitent with the ones from Open Clover meaning both of them detect 99 calls of the overlaps_() method and trace them the same way.
 
+#### Yoyo 
+I went for the approach for cloning the function but hardcoded the branch record in between the lines of code. The data strructure for the coverage is a 2D matrix, with shape (#branches, 2). The first column [i for 0≤i<#branches][0] is for true cases, where the if statement is true; and [i for 0≤i<#branches][1] are for false cases.
+
+**Output:**
+
+I also used BufferedWriter to output a txt file, which will display the workflow for that function call (e.g. `"Branch 1 reached: accel is null"` and also the summary of the number of times each branch in true and false cases. There will be only one txt file for all test cases. Filepath is to be  `
+`src/test/resources/coverage_report/report.txt` .
+
+##### Evaluation
+
+1. Quality of Coverage Measurement
+
+The quality of my coverage measurement is limited as it does not take into account ternary operators (condition ? yes : no) because there are none in the original code. Additionally, the current implementation focuses solely on `if-else` statements.
+
+2. Limitations of the Tool
+
+The tool is specifically designed for the `testPointsOnPolyline2D_` function, making it hardcoded and inflexible. If the code is modified or refactored, the instrumentation would need to be rewritten to accommodate the changes, limiting its reusability.
+
+3. Consistency with Automated Tools
+
+I used Clover to measure branch coverage, and the results from my DIY coverage tool are consistent with those produced by Clover. Clover provides execution counts for each line of code, aligning with the coverage insights generated by my implementation.
+
+
 ## Coverage improvement
 
 ### Linus - added test cases to appendDouble
@@ -309,6 +432,21 @@ The following [test cases](https://github.com/DD2480-Group-27/geometry-api-java-
 - TestRelationalOperationsMatrix::testRelateOverlapLines
 - TestRelationalOperationsMatrix::testRelateOverlapPoints
 - TestRelationalOperationsMatrix::testRelateOverlapPolygons
+
+### Yoyo - added test cases for _testPointsInEnvelope2D
+
+Record of branch coverage before and after adding tests
+
+| Funciton Name | Total Coverage before | Total Coverage After |
+| --- | --- | --- |
+| _testPointsInEnvelope2D | 0% | 87.5% |
+
+For the function used in the refactoring section (`testPointsOnPolyline2D_`), the branch coverage is already high (78.4%), and the remaining branches cannot be tested unless compex setup is done which requires full understanding of the Accelerators and RasterizedGeometry class. Therefore, I chose another fucntion in the same class `PolygonUtils.java`
+
+I also chose another function in the same class (`_testPointsInEnvelope2D`), which has 0 tests on it, and do 3 extra test cases for it (one for empty envelope, one for inside envelope case, another for outside envelope case)
+
+The ests need to setup a envelope for testing, but no extra interfaces are needed since the test suite for polygons (`testPolygons` ) exists already.
+
 
 ## Self-assessment: Way of working
 
