@@ -37,7 +37,26 @@ A second noticeable point, since we are talking of an API some of its public jav
 4. Are exceptions taken into account in the given measurements?
 5. Is the documentation clear w.r.t. all the possible outcomes?
 
-### Kristin - function: 
+### Linus - function: AppendDouble
+Results: 
+(Entire codebase)
+Total nloc: 78292
+Automated AvgCCN: 3.4
+
+(StringUtils)
+Total nloc: 67
+Automated AvgCCN: 6.0
+
+(AppendDouble function)
+Total nloc: 29
+Automated CCN count: 9.0
+Manual CCN count: 9.0
+
+Whether the functions are just complex or also long depends.
+
+The function AppendDouble appends a double value to a StringBuilder with a specified precision. There are no exceptions in the function but lizard would count them towards the CCN. The documentation is not clear, there is no documentation for this function.
+
+### Kristin - function: compareSegments
 
 I chose the function "compareSegments" from geometry-api-java-coverage/src/main/java/com/esri/core/geometry/SweepComparator.java. Lizard calculates the CC to 16. For my manual calculation i used the
 formula "M = π - s + 2" from which I get 17, which is one higher than the number produced by Lizard.
@@ -69,6 +88,18 @@ For a calculation of the cyclomatic complexity by hand, we can infer that lizard
 Thus we have the initial `if (dim_a == dim_b)`, then the `if (dim_a != 1)` and twice the nine decision points with the `chartAt()` call. The formula for the CC can be written as `CC=E−N+2P` with E the number of edges in the control flow graph, N the number of nodes in the same graph and P the number of connected components. This formula can be rewritten as following `CC=(Number of decision points)+1`. Here we have:`CC = 1 + 1 + 2*9 + 1 = 21` before reduction.
 
 ## Refactoring
+
+### Linus - function: appendDouble
+
+Plan for refactoring complex code:
+
+Clamp precision using Math.max and Math.min to replace two if-statements. Move checking of whether string contains a dot and no exponent to separate helper function.
+
+Estimated impact of refactoring (lower CC, but other drawbacks?).
+
+Lowers CC by 2 (from 9 --> 7). Using clamping reduces readibility.
+
+Carried out refactoring (optional, P+):
 
 ### Kristin - function: compareSegments
 
@@ -133,6 +164,24 @@ To start this second part we first generated a general coverage report to know o
 As explained above, by the use of one single command the report was generated using all the tests in their last version and giving per-line coverage adding the number of times the given line is indeed executed (0 if never).
 
 ### DIY tools
+
+#### Linus
+
+https://github.com/DD2480-Group-27/geometry-api-java-coverage/tree/linus/coverage/appendDouble
+
+##### Evaluation
+
+1. How detailed is your coverage measurement?
+
+The custom coverage measurement tracks the number of times each branch of the function was taken.
+
+2. What are the limitations of your own tool?
+
+It is hard coded for this specific function.
+
+3. Are the results of your tool consistent with existing coverage tools?
+
+Somewhat. My custom coverage tool uses branch coverage while Clover uses a combination of several, branch coverage being one of them. Therefore Clover has a higher coverage percentage than my too
 
 #### Kristin
 
@@ -202,6 +251,42 @@ The big drawback of my tool is that it is absolutly not generic. It is constrain
 The results of my coverage tool are consitent with the ones from Open Clover meaning both of them detect 99 calls of the overlaps_() method and trace them the same way.
 
 ## Coverage improvement
+
+### Linus - added test cases to appendDouble
+
+Report of old coverage: 
+
+Function has 71% total coverage according to Clover.
+
+Branch 0 was taken 0 times
+Branch 1 was taken 0 times
+Branch 2 was taken 66368 times
+Branch 3 was taken 3663 times
+Branch 4 was taken 0 times
+Branch 5 was taken 0 times
+Branch 6 was taken 3663 times
+Branch 7 was taken 3663 times
+
+Report of new coverage:
+
+Branch 0 was taken 1 times
+Branch 1 was taken 1 times
+Branch 2 was taken 66388 times
+Branch 3 was taken 3664 times
+Branch 4 was taken 1 times
+Branch 5 was taken 0 times
+Branch 6 was taken 3664 times
+Branch 7 was taken 3664 times
+
+Test cases added:
+
+StringUtils.appendDouble(123.456, -1, stringBuilder);
+Assert.assertEquals("1e+02", sb.toString());
+
+and
+
+StringUtils.appendDouble(123.456, 18, stringBuilder);
+Assert.assertEquals("123.456", sb.toString());
 
 ### Kristin - added test cases for intersectLineLine
 
