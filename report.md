@@ -37,6 +37,17 @@ A second noticeable point, since we are talking of an API some of its public jav
 4. Are exceptions taken into account in the given measurements?
 5. Is the documentation clear w.r.t. all the possible outcomes?
 
+### Kristin - function: 
+
+I chose the function "compareSegments" from geometry-api-java-coverage/src/main/java/com/esri/core/geometry/SweepComparator.java. Lizard calculates the CC to 16. For my manual calculation i used the
+formula "M = π - s + 2" from which I get 17, which is one higher than the number produced by Lizard.
+
+The function is quite long compared to the average NLOC (50 vs 15), although far from the longest functions of 250-500 NLOC. However, if you compare the longest of all functions with the most complex of all functions, there seems to be a correlation. In the top 10 lists for both of these properties, 7 of the functions appear in both lists. These functions involve complex operations. They perform geometrical calculations such as cutting a shape of any kind with a shape of any kind. This means they require many many conditional statements for the many possible cases which can arise.
+
+Yes, lizard takes exceptions into account. It considers exceptions as possible branches, which increases the number of branches and thereby increases the CC. However, in my studied function there are no exceptions and so this makes no difference. 
+
+Documentation is more than unclear, actually there is no documentation of these functions! Neither for the top 10 or compareSegments.
+
 ### Henrik - function: doOne
 
 The helper function doOne in the file PointInPolygonHelper.java was studied. Both the manual calculation and lizard got the cyclomatic complexity of the function to 21. Being just 57 lines the function is not particularly long despite the cyclomatic complexity. The function checks if a point is inside of a polygon, on the border of a polygon or outside of a polygon. As no exceptions exist in fuction they are not accouted for in the complexity. Most parts of the function are well documented, but the method to check if the point is inside or outside a polygon using the "odd-even rule" could be better documented
@@ -59,6 +70,50 @@ Thus we have the initial `if (dim_a == dim_b)`, then the `if (dim_a != 1)` and t
 
 ## Refactoring
 
+### Kristin - function: compareSegments
+
+To reduce complexity, I suggest making a helper function called makeEdge for when tryGetCachedEdge returns null. (see below) This would remove nestled if-statements and save many lines. 
+
+``SimpleEdge edgeLeft = tryGetCachedEdge_(leftElm);
+		if (edgeLeft == null) { //call makeEdge here instead of following if-statements
+			if (m_vertex_1 == left_vertex)
+				edgeLeft = m_temp_simple_edge_1;
+			else {
+				m_vertex_1 = left_vertex;
+				edgeLeft = tryCreateCachedEdge_(leftElm);
+				if (edgeLeft == null) {
+					edgeLeft = m_temp_simple_edge_1;
+					m_temp_simple_edge_1.m_value = leftElm;
+				}
+				initSimpleEdge_(edgeLeft, left_vertex);
+			}
+		} else
+			m_vertex_1 = left_vertex;
+
+		SimpleEdge edgeRight = tryGetCachedEdge_(right_elm);
+		if (edgeRight == null) { //call makeEdge here instead of following if-statements
+			if (m_vertex_2 == right_vertex)
+				edgeRight = m_temp_simple_edge_2;
+			else {
+				m_vertex_2 = right_vertex;
+				edgeRight = tryCreateCachedEdge_(right_elm);
+				if (edgeRight == null) {
+					edgeRight = m_temp_simple_edge_2;
+					m_temp_simple_edge_2.m_value = right_elm;
+				}
+				initSimpleEdge_(edgeRight, right_vertex);
+			}
+		} else
+			m_vertex_2 = right_vertex; ´´
+
+
+Rewriting the ternary operator lines:
+``` 
+int kind = edgeLeft.m_b_horizontal ? 1 : 0;
+kind |= edgeRight.m_b_horizontal ? 2 : 0; 
+```
+would also make the code more readable
+
 ### Henrik - function: doOne
 
 The function was refactored by putting part of it into a helper function for easier readibility.
@@ -78,6 +133,25 @@ To start this second part we first generated a general coverage report to know o
 As explained above, by the use of one single command the report was generated using all the tests in their last version and giving per-line coverage adding the number of times the given line is indeed executed (0 if never).
 
 ### DIY tools
+
+#### Kristin
+
+My DIY tool is not very high quality, but it produces results in line with clover and works for the specific function which I have been working on. It is hardcoded into the function I am testing coverage of (intersectLineLine). At the beginning of the file I created "static boolean[] covered = new boolean[52]", and at each branch I set covered[*branch-number*] to true if the branch is taken. On return I print a result to the file "coverage.txt" of all branches *not* covered.
+
+##### Evaluation
+
+1. How detailed is your coverage measurement?
+
+It is clear for the specific funtion, but it *only* covers this function. It does not say in which test the coverage happens or any further details. So it is basically a bare minimum tool.
+
+2. What are the limitations of your own tool?
+
+As mentioned, it it completely limited to this situation and not very useful outside of it.
+
+3. Are the results of your tool consistent with existing coverage tools?
+
+Yes! (with clover at least)
+
 
 #### Henrik
 The DIY coverage tool for isPointInRing() was implemented as a static array of boolean values that turn true if the branch has been visited. The summarized results from all tests in the testPointInRing() to see what branches were reached and which weren't, this array is then printed in the test results. 
@@ -128,6 +202,10 @@ The big drawback of my tool is that it is absolutly not generic. It is constrain
 The results of my coverage tool are consitent with the ones from Open Clover meaning both of them detect 99 calls of the overlaps_() method and trace them the same way.
 
 ## Coverage improvement
+
+### Kristin - added test cases for intersectLineLine
+
+The coverage for intersectLineLine was 88.7 %, there were 6 branches not covered. I added two test cases in an added file called TestIntersectLineLine.java: testIntersectionPointsNotNull() and testParam2Null(). I chose these because some not covered branches were lines like "if(!IntersectionPoints == null)" and "if(param2 == null)". With my added test cases, there are two more branches covered, so now only 4 are not covered. This can be seen using my diy tool and confirmed with clover.
 
 ### Henrik - added test cases for isPointInRing()
 
