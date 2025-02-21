@@ -186,7 +186,8 @@ Carried out refactoring (optional, P+):
 
 To reduce complexity, I suggest making a helper function called makeEdge for when tryGetCachedEdge returns null. (see below) This would remove nestled if-statements and save many lines. 
 
-``SimpleEdge edgeLeft = tryGetCachedEdge_(leftElm);
+```java
+	SimpleEdge edgeLeft = tryGetCachedEdge_(leftElm);
 		if (edgeLeft == null) { //call makeEdge here instead of following if-statements
 			if (m_vertex_1 == left_vertex)
 				edgeLeft = m_temp_simple_edge_1;
@@ -216,11 +217,12 @@ To reduce complexity, I suggest making a helper function called makeEdge for whe
 				initSimpleEdge_(edgeRight, right_vertex);
 			}
 		} else
-			m_vertex_2 = right_vertex; ´´
+			m_vertex_2 = right_vertex; 
+```
 
 
 Rewriting the ternary operator lines:
-``` 
+```java
 int kind = edgeLeft.m_b_horizontal ? 1 : 0;
 kind |= edgeRight.m_b_horizontal ? 2 : 0; 
 ```
